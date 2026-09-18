@@ -1,0 +1,109 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "mailflare-opc",
+	"main": "./worker.ts",
+	"compatibility_date": "2026-05-20",
+	"keep_vars": true,
+	"vars": {
+		// Runtime token used by Mailflare to call Zones / Email Routing / Email Sending APIs.
+		// Replace with your own token (or set it via `wrangler secret put CF_TOKEN`). Never commit a real token.
+		"CF_TOKEN": "REPLACE_WITH_CF_TOKEN",
+		// Email Routing rules must target the actual deployed Worker name.
+		"CF_EMAIL_WORKER_NAME": "mailflare-opc",
+	},
+	"compatibility_flags": [
+		"nodejs_compat",
+		"global_fetch_strictly_public"
+	],
+	"assets": {
+		"binding": "ASSETS",
+		"directory": ".open-next/assets",
+	},
+	"images": {
+		"binding": "IMAGES",
+	},
+	"services": [
+		{
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "mailflare-opc",
+		},
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"name": "REALTIME",
+				"class_name": "RealtimeHub",
+			},
+		],
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_sqlite_classes": [
+				"RealtimeHub",
+			],
+		},
+	],
+	"triggers": {
+		"crons": ["0 2 * * *"],
+	},
+	"ratelimits": [
+		{
+			"name": "LOGIN_RATE_LIMIT",
+			"namespace_id": "1001",
+			"simple": {
+				"limit": 20,
+				"period": 60,
+			},
+		},
+	],
+	"observability": {
+		"enabled": true,
+	},
+	"upload_source_maps": true,
+	"send_email": [
+		{
+			"name": "EMAIL",
+			"remote": false,
+		},
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "mailflare",
+			"migrations_dir": "drizzle/migrations",
+			// Set by `npm run setup` (or `wrangler d1 create mailflare` + paste the id). Never commit a real database id.
+			"database_id": "REPLACE_WITH_D1_DATABASE_ID",
+		},
+	],
+	"r2_buckets": [
+		{
+			"binding": "BUCKET",
+			"bucket_name": "mailflare-raw","preview_bucket_name": "mailflare-raw",
+		},
+	],
+	"queues": {
+		"producers": [
+			{
+				"binding": "INBOUND_QUEUE",
+				"queue": "mailflare-inbound",
+			},
+			{
+				"binding": "OUTBOUND_QUEUE",
+				"queue": "mailflare-outbound",
+			},
+		],
+		"consumers": [
+			{
+				"queue": "mailflare-inbound",
+				"max_batch_size": 5,
+				"max_retries": 3,
+			},
+			{
+				"queue": "mailflare-outbound",
+				"max_batch_size": 5,
+				"max_retries": 3,
+			},
+		],
+	},
+}
