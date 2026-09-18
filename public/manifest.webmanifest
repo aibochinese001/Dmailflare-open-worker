@@ -1,0 +1,26 @@
+{
+	"name": "Mailflare",
+	"short_name": "Mailflare",
+	"description": "自托管域名邮箱 - Self-hosted email on Cloudflare",
+	"start_url": "/inbox",
+	"scope": "/",
+	"display": "standalone",
+	"orientation": "any",
+	"background_color": "#f6f8fc",
+	"theme_color": "#f6f8fc",
+	"lang": "zh-CN",
+	"icons": [
+		{
+			"src": "/icons/icon.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "any"
+		},
+		{
+			"src": "/icons/icon.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "maskable"
+		}
+	]
+}
