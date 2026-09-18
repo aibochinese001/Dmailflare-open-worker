@@ -1,0 +1,105 @@
+import { authFetch } from "@/lib/auth/client";
+import { fetchCachedMessageDetail, getCachedMessageDetail } from "@/lib/messages/detail-cache";
+import { getEmailAddress, getEmailAddressList, normalizeEmailAddress } from "@/lib/email/address";
+import { getDisplayNameForAddress } from "@/lib/contacts/utils";
+import { htmlToReadableText, splitRepliedEmailContent } from "@/lib/email/reply-content-utils";
+import { splitQuotedHtml } from "@/components/compose/rich-text-utils";
+import type { Message } from "@/hooks/types";
+import type { MessageAttachment, MessageBodyDisplay, MessageDetailResponse } from "./types";
+
+export async function fetchMessageDetail(messageId: string): Promise<MessageDetailResponse> {
+	return (await fetchCachedMessageDetail(messageId)) as MessageDetailResponse;
+}
+
+export function getCachedMessageDetailForDisplay(messageId: string): MessageDetailResponse | undefined {
+	return getCachedMessageDetail(messageId) as MessageDetailResponse | undefined;
+}
+
+export async function fetchMessageMetadata(messageId: string): Promise<Pick<MessageDetailResponse, "attachments" | "unsubscribeUrl">> {
+	return (await authFetch(`/api/messages/${messageId}/metadata`)).json();
+}
+
+export function getMessageHeaderParties(message: Message, currentAccountName?: string) {
+	return {
+		fromName:
+			message.direction === "outbound" && currentAccountName
+				? currentAccountName
+				: getDisplayNameForAddress(message.fromAddr, message.fromContactName),
+		fromAddress: getEmailAddress(message.fromAddr),
+		toName:
+			message.direction === "inbound"
+				? "me"
+				: getDisplayNameForAddress(message.toAddr, message.toContactName),
+	};
+}
+
+/**
+ * The mailbox address this message reached, used as the reply sender and to
+ * tell "sent" from "received" in quoted history. With several recipients the
+ * mailbox's own address is whichever of them it can send as.
+ */
+export function getOwnAddressForMessage(message: Message, ownAddresses: string[]): string {
+	if (message.direction === "outbound") return getEmailAddress(message.fromAddr);
+	const own = new Set(ownAddresses.map((address) => normalizeEmailAddress(address)));
+	const listed = [...getEmailAddressList(message.toAddr), ...getEmailAddressList(message.ccAddr)];
+	return listed.find((address) => own.has(address)) ?? ownAddresses[0] ?? getEmailAddress(message.toAddr);
+}
+
+export function getMessageBodyDisplay(
+	textBody: string | null | undefined,
+	htmlBody: string | null | undefined,
+	fallback: string | null | undefined,
+	ownAddress?: string,
+): MessageBodyDisplay {
+	// A message composed in Mailflare marks its quoted part, so the rich body can
+	// stay rich and the quote fold on its own. Other mail falls back to the
+	// text heuristics, which can only render the result as text.
+	const marked = splitQuotedHtml(htmlBody);
+	if (marked.quoted !== null) {
+		const parts = splitRepliedEmailContent(htmlToReadableText(marked.body), { ownAddress });
+		return {
+			latestContent: parts.latestContent,
+			quotedContent: [],
+			htmlBody: marked.body,
+			quotedHtml: marked.quoted,
+			hasQuotedContent: true,
+		};
+	}
+
+	const textSource = textBody ?? (htmlToReadableText(htmlBody) || fallback || "");
+	const parts = splitRepliedEmailContent(textSource, { ownAddress });
+
+	return {
+		...parts,
+		htmlBody: parts.quotedContent.length > 0 ? null : htmlBody ?? null,
+		quotedHtml: null,
+		hasQuotedContent: parts.quotedContent.length > 0,
+	};
+}
+
+export function getAttachmentUrl(messageId: string, attachmentId: string): string {
+	return `/api/messages/${messageId}/attachments/${attachmentId}?preview=1`;
+}
+
+export function resolveInlineAttachmentUrls(
+	htmlBody: string | null,
+	messageId: string,
+	attachments: MessageAttachment[],
+): string | null {
+	if (!htmlBody) return null;
+
+	return attachments.reduce((html, attachment) => {
+		if (!attachment.contentId) return html;
+		const contentId = attachment.contentId.replace(/^<|>$/g, "");
+		return html.replaceAll(
+			`cid:${contentId}`,
+			getAttachmentUrl(messageId, attachment.id),
+		);
+	}, htmlBody);
+}
+
+export function formatAttachmentSize(size: number): string {
+	if (size < 1024) return `${size} B`;
+	if (size < 1024 * 1024) return `${Math.ceil(size / 1024)} KB`;
+	return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+}
