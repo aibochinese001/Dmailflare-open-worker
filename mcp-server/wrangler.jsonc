@@ -1,0 +1,23 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "mailflare-mcp",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-05-20",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true
+	},
+	"vars": {
+		// The Mailflare deployment this MCP server fronts.
+		// Replace with your deployed Worker's URL, e.g. https://<your-worker>.workers.dev
+		"MAILFLARE_BASE_URL": "https://REPLACE_WITH_MAILFLARE_BASE_URL"
+	},
+	// Service binding: same-account workers.dev fetches are intercepted by the
+	// edge (404), so requests to the Mailflare app go through this binding.
+	"services": [
+		{
+			"binding": "MAILFLARE",
+			"service": "mailflare-opc"
+		}
+	]
+}
