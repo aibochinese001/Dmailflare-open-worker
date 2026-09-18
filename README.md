@@ -1,78 +1,81 @@
-<img src="/icons/icon.svg" alt="Mailflare" width="72" />
+# Mailflare（Dmailflare）
 
-# Mailflare (Dmailflare)
+## 开源企业域名邮箱系统
 
-Mailflare is a self-hosted email inbox for custom domains, built on Cloudflare.
+Mailflare（Dmailflare）是一套开源的企业域名邮箱系统，基于 **Next.js、Cloudflare Workers、D1、R2 和 Queues** 构建。无需购买或维护传统服务器，即可将系统无服务器部署在 Cloudflare Workers 上，搭建属于自己的企业域名邮箱。
 
-> 面向 Agent / AI 的自动化部署指南，请阅读 **[AGENTS.md](AGENTS.md)** —— 包含一键初始化脚本、Token 权限清单、Secrets 清单与常见报错对照表。
+项目适合企业、团队、个人品牌以及需要管理多个自定义域名邮箱的用户使用。邮箱数据存储在您自己的 Cloudflare 账户中，兼顾灵活性、可扩展性与数据自主权。
+
+## 部署教程
+
+完整部署教程请参考：
+
+[Cloudflare Workers 无服务器部署企业域名邮箱教程](https://opcgrow.org/article.php?id=154)
+
+也可以使用 Cloudflare 一键部署：
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/aibochinese001/Dmailflare-open-worker)
 
-Thanks to mailflare sponsors. Want to support the project? Drop [@hieuSSR](https://x.com/hieuSSR) a message
+## 项目功能
 
-## What you can do
+- **自定义域名邮箱**：连接托管在 Cloudflare 的域名，创建企业邮箱和团队邮箱。
+- **收发邮件**：支持邮件接收、发送、回复、转发及抄送、密送。
+- **富文本编辑**：支持 HTML 富文本邮件、纯文本内容、签名和自动回复。
+- **附件管理**：支持邮件附件上传、下载，以及转发邮件时复制原邮件附件。
+- **邮件整理**：支持搜索、文件夹、自定义分类、星标、归档、延后处理、垃圾邮件和回收站。
+- **邮件线程**：自动识别回复关系，将同一对话中的邮件归纳为会话，方便连续阅读和管理。
+- **收件规则**：支持按域名、邮箱地址或发件人设置存储、转发、拒收和分类规则。
+- **联系人管理**：自动整理联系人，并支持手动管理联系人信息。
+- **实时通知**：通过 Durable Objects 提供实时收件箱更新和新邮件通知。
+- **多账户与权限**：支持个人邮箱、共享邮箱、委派访问和账户权限管理。
+- **Webhook 与 API**：支持 API 密钥、Webhook、审计日志，便于对接企业内部系统和自动化流程。
+- **数据备份**：支持数据库及邮件数据备份，数据保存在您自己的 Cloudflare D1 和 R2 资源中。
+- **无服务器架构**：基于 Cloudflare Workers 运行，不需要维护虚拟机、传统服务器或邮件服务器。
 
-- Connect domains and set up Cloudflare Email Routing from the dashboard.
-- Create personal and shared mailboxes with delegated access.
-- Send and receive email with attachments, rich formatting, signatures, and automatic replies.
-- Organize mail with search, custom folders, stars, snoozing, archive, spam, and trash.
-- Create routing rules to store, forward, reject, or categorize incoming messages.
-- Get real-time inbox updates and new-message notifications.
-- Import and export mail, manage contacts, and block unwanted senders.
-- Manage accounts, permissions, API keys, webhooks, audit logs, and database backups.
+## 技术架构
 
-## How it works
+- **运行平台**：Cloudflare Workers + OpenNext
+- **前端框架**：Next.js App Router
+- **数据库**：Cloudflare D1 + Drizzle ORM
+- **文件与附件存储**：Cloudflare R2
+- **异步任务**：Cloudflare Queues
+- **实时通信**：Cloudflare Durable Objects + WebSocket
+- **邮件接收**：Cloudflare Email Routing
+- **定时任务**：Cloudflare Cron Triggers
 
-Mailflare runs in your Cloudflare account. Email Routing delivers incoming messages to the app, while Cloudflare's email service handles outgoing messages. Your mail data stays in your own D1 database and attachments are stored in your own R2 bucket.
+邮件接收后会先保存原始 MIME 数据，再通过队列异步解析和处理，降低请求延迟并提升系统稳定性。邮件发送则使用 Cloudflare 的邮件发送能力，适合在 Cloudflare 生态内统一部署和管理。
 
-## How much does it cost?
+## 适配 mailsorta.opcgrow.org 邮情 AI 分拣助手
 
-You can setup Mailflare and receive email for free
+Mailflare 可以与 [mailsorta.opcgrow.org](https://mailsorta.opcgrow.org) 邮情 AI 分拣助手进行适配，为企业邮箱增加智能邮件分析和自动分拣能力。
 
-A [Paid Worker](https://developers.cloudflare.com/workers/platform/pricing/) plan ($5/month) is required to send email (and it's recommend to have a smooth experience)
+通过对接 Mailflare 的 API、Webhook 或邮件处理流程，邮件到达后可以交给邮件 AI 助手进行识别和分类，例如：
 
-## Deploy
+- 判断邮件主题和内容，识别客户咨询、订单、售后、合作、通知等类型。
+- 自动识别重要邮件、紧急邮件、垃圾邮件和营销邮件。
+- 根据 AI 分析结果自动归档、添加标签或移动到指定文件夹。
+- 根据发件人、关键词、邮件意图和业务类型匹配不同的处理规则。
+- 将需要人工处理的邮件标记出来，帮助团队快速处理重点事项。
+- 为后续的自动回复、工单流转、客户跟进和企业内部通知提供基础。
 
-Getting started takes three steps:
+这种组合可以形成一套完整的智能邮箱工作流：
 
-1. **Deploy the app.** Click **Deploy to Cloudflare** and keep the app name as `mailflare`. The app will not work correctly under another Worker name.
-2. **Complete setup.** Open the deployed app and follow `/setup` to check the installation and create your admin account.
-3. **Connect your domain.** Add a domain managed by the same Cloudflare account. Mailflare configures its email routing and helps you create the first mailbox.
-
-⚠️ IMPORTANT: **`CF_TOKEN` is required during deployment**. Create a scoped [Cloudflare API token with the following permissions](https://github.com/hieunc229/mailflare/issues/24#issuecomment-5523686105) for the domains you want to connect.
-- All accounts - Email Sending:Edit, DNS Settings:Edit, Email Routing Addresses:Edit
-- All zones - DNS Settings:Edit, Email Routing Rules:Edit, Zone Settings:Edit, DNS:Edit
-
-See the [deployment guide](docs/deployment.md) for required permissions, manual deployment, backups, and updates.
-
-### Self-host with Docker instead
-
-Mailflare also runs as one container on any server, with SQLite and local files in place of D1 and R2, a built-in SMTP listener for inbound mail (or a small Cloudflare relay Worker if you want to keep MX on Cloudflare), and any SMTP relay or Cloudflare Email Sending for outbound.
-
-```bash
-cp .env.docker.example .env.docker
-docker compose up -d --build
+```text
+客户发邮件
+    ↓
+Cloudflare Email Routing
+    ↓
+Mailflare 接收并保存邮件
+    ↓
+mailsorta.opcgrow.org 邮情 AI 分析
+    ↓
+返回分类与处理结果
+    ↓
+Mailflare 自动归档、标记、转发或通知
 ```
 
-See [docs/self-hosting.md](docs/self-hosting.md).
+具体的 AI 分拣规则、调用方式和权限配置，可根据 mailsorta.opcgrow.org 提供的接口说明进行配置。建议通过 Webhook 或服务端 API 完成对接，避免在浏览器端暴露敏感凭据，并为接口设置独立的访问密钥和必要的权限范围。
 
-## Local development
+## 开源协议
 
-```bash
-cp .dev.vars.example .dev.vars
-npm install
-npm run db:migrate:local
-npm run dev
-```
-
-Add your Cloudflare credentials to `.dev.vars`, then open [http://localhost:3000](http://localhost:3000). For sample local data, run `npm run db:seed` while the development server is running.
-
-## Documentation
-
-- [Deployment and configuration](docs/deployment.md)
-- [API and integrations](docs/api.md)
-- [Troubleshooting](docs/troubleshooting.md)
-
-## License
-
-See [LICENSE](LICENSE).
+本项目遵循仓库中的 [LICENSE](LICENSE) 许可协议。
