@@ -1,0 +1,22 @@
+# Mailflare (Dmailflare) — 本地开发环境变量模板
+# 复制为 .dev.vars 并填入真实值。永远不要把真实值提交到仓库。
+
+# Preferred: scoped API token.
+# This is an app runtime token, not the Cloudflare deploy/build token.
+CF_TOKEN=your_api_token_with_zone_email_permissions
+# Optional: lets the admin dashboard trigger the GitHub update workflow.
+# GITHUB_UPDATE_TOKEN=github_pat_with_actions_write
+# GITHUB_UPDATE_REPO=owner/repo
+# GITHUB_UPDATE_REF=main
+
+# Optional: Cloudflare Turnstile bot protection (login & first-run registration).
+# TURNSTILE_SECRET_KEY=your_turnstile_secret
+# NEXT_PUBLIC_TURNSTILE_SITE_KEY=your_turnstile_site_key
+
+# Legacy Global API Key alternative. Use this only instead of CF_TOKEN.
+# CF_EMAIL=you@example.com
+# CF_API_KEY=your_global_api_key
+
+# Self-hosted (Docker) only:
+# INBOUND_WEBHOOK_SECRET=shared_secret_with_cloudflare_relay
+# CF_ACCOUNT_ID=your_cloudflare_account_id
