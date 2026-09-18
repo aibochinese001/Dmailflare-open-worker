@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 async function getDefaultIcon(env: CloudflareEnv): Promise<Response> {
-	const asset = await env.ASSETS.fetch("https://mailflare.local/icon-96.png");
+	const asset = await env.ASSETS.fetch("https://mailflare.local/icons/icon.svg");
 	return new Response(await asset.arrayBuffer(), {
 		status: asset.status,
 		statusText: asset.statusText,
