@@ -1,0 +1,230 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1779256253875,
+      "tag": "0000_flowery_smasher",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1779256253876,
+      "tag": "0001_add_reset_email",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1779256253877,
+      "tag": "0002_add_message_read",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1779256253878,
+      "tag": "0003_add_contacts",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1779256253879,
+      "tag": "0004_add_accounts",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1779256253880,
+      "tag": "0005_add_folders",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1779256253881,
+      "tag": "0006_add_rule_conditions",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1779256253882,
+      "tag": "0007_add_shared_mailboxes",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1781053200000,
+      "tag": "0008_add_message_attachments",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1781312400000,
+      "tag": "0009_add_backups",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1784285031058,
+      "tag": "0010_hard_squirrel_girl",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1787529600000,
+      "tag": "0011_add_folder_colors",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1787616000000,
+      "tag": "0012_add_app_settings",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1787702400000,
+      "tag": "0013_add_license_settings",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1787792400000,
+      "tag": "0014_add_account_permissions",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "6",
+      "when": 1787882400000,
+      "tag": "0015_add_forwarding_email",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "6",
+      "when": 1788000000000,
+      "tag": "0016_add_message_snooze",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "6",
+      "when": 1788086400000,
+      "tag": "0017_add_message_star",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "6",
+      "when": 1788172800000,
+      "tag": "0018_add_mailbox_domain_aliases",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "6",
+      "when": 1788259200000,
+      "tag": "0019_merge_message_bodies",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "6",
+      "when": 1788345600000,
+      "tag": "0020_add_calendar_templates_schedule",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "6",
+      "when": 1788432000000,
+      "tag": "0021_add_mailbox_signature",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "6",
+      "when": 1788518400000,
+      "tag": "0022_add_mailbox_auto_reply",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "6",
+      "when": 1788604800000,
+      "tag": "0023_add_mailbox_aliases",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "6",
+      "when": 1788604800001,
+      "tag": "0024_add_advanced_routing_and_webhook_retries",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "6",
+      "when": 1788691200000,
+      "tag": "0025_add_threading_and_cc_bcc",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "6",
+      "when": 1788691200001,
+      "tag": "0026_add_contact_avatars",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "6",
+      "when": 1788796800000,
+      "tag": "0027_add_domain_sending_intent",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "6",
+      "when": 1788850800000,
+      "tag": "0028_add_keyboard_shortcuts_setting",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "6",
+      "when": 1788850800001,
+      "tag": "0029_add_spam_protection",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "6",
+      "when": 1788850800002,
+      "tag": "0030_add_message_search_index",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "6",
+      "when": 1788850800003,
+      "tag": "0031_add_password_reset_and_mfa",
+      "breakpoints": true
+    }
+  ]
+}
